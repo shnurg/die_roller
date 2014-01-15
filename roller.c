@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
 }
 
 
+// note: NEED TO FIX THIS TO ACCOMODATE NEGATIVE MODIFIERS
 void read_roll(char* str, int* d, int* s, int* m)
 {
     // this part checks for the case in which arg is formed like 'd+3'.
