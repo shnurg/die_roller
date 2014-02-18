@@ -20,10 +20,11 @@ void read_roll(char* str, int* d, int* s, int* m)
     int sign = 0; 
     char* it = str;
     while(*it++ != '\0'){
-        if(*it == '+')
-            sign++;
-        else if(*it == '-')
-            sign--;
+        if(*it == '+'){
+            sign++; break;
+        } else if(*it == '-'){
+            sign--; break;
+        }
     }
 
     /*  How sscanf can fail here :
