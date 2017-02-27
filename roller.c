@@ -13,13 +13,13 @@ void showError()
     exit(1);
 }
 
-void isDelimitedCorrectly(char* str, char delimiter)
+int isDelimitedCorrectly(char* str, char delimiter)
 {
     // this part checks for the case in which arg is formed like 'd+3'.
     // if delimiter is not immediately followed by a digit, then die
-    int i=0;
+    int i = 0;
     while(*(str+i) != delimiter) i++;
-    if(!isdigit(*(str+i+1))) showError();
+    return isdigit(*(str+i+1));
 }
 
 int getRollSign(char* str)
@@ -33,7 +33,6 @@ int getRollSign(char* str)
 
 void parseRollString(char* str, int* d, int* s, int* m)
 {
-    
     if (!isDelimitedCorrectly(str, 'd')) showError();
 
     // '-' if minus sign found, '+' if plus sign found, 'x' otherwise
@@ -60,18 +59,18 @@ void parseRollString(char* str, int* d, int* s, int* m)
     // Multiple tokens, but malformed
     if (c < 2 && (
         ((c=sscanf(str, "d%d+%d", s, m)) == 0) ||
-        ((c=sscanf(str, "d%d-%d", s, m)) == 0))
+        ((c=sscanf(str, "d%d-%d", s, m)) == 0)))
     {
         showError();
     }
     
-    if(c == 3) {                                 // 2d20+3
+    if (c == 3) {                                 // 2d20+3
         printf("%s %dd%d%c%d.\n", ROLLING, *d, *s, sign, *m);
-    } else if(c == 2 && *d == 0) {               // d20+3
+    } else if (c == 2 && *d == 0) {               // d20+3
         printf("%s d%d%c%d.\n", ROLLING, *s, sign, *m);
-    } else if(c == 2 && *m == 0) {               // 2d20
+    } else if (c == 2 && *m == 0) {               // 2d20
         printf("%s %dd%d.\n", ROLLING, *d, *s);
-    } else if(c == 1 && *d == 0 && *m == 0) {    // d20
+    } else if (c == 1 && *d == 0 && *m == 0) {    // d20
         printf("%s d%d.\n", ROLLING, *s);
     } else {
         showError();
@@ -79,7 +78,7 @@ void parseRollString(char* str, int* d, int* s, int* m)
 
 }
 
-int computeRollValue(int d, int s, int m)
+int computeRollValue(char* str, int d, int s, int m)
 {
     int i, currentRoll, totalValue=0;
     srand(time(NULL));
@@ -102,9 +101,9 @@ int main(int argc, char* argv[])
 {
     if(argc < 2) showError();
     
-    int d=0, s=0, m=0;
+    int d = 0, s = 0, m = 0;
     parseRollString(argv[1], &d, &s, &m);
-    printf("Total roll: %d\n", computeRollValue(d, s, m));
+    printf("Total roll: %d\n", computeRollValue(argv[1], d, s, m));
     
     return EXIT_SUCCESS;
 }
